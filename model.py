@@ -1,6 +1,6 @@
 import random
 
-if __name__ == '__main__' :
+if __name__ == '__main__':
     height = 5
     width = 5
 else:
@@ -31,7 +31,7 @@ grid_model = life_model
 
 for i in range(height):
     for j in range(width):
-        life_model[i][j] = random.randint(0,1)
+        life_model[i][j] = random.randint(0, 1)
 
 # life_model[1][2] = 1
 # life_model[2][3] = 1
@@ -39,13 +39,15 @@ for i in range(height):
 # life_model[3][2] = 1
 # life_model[3][3] = 1
 
+
 def randomize():
     for i in range(height):
         for j in range(width):
             grid_model[i][j] = random.randint(0, 1)
 
+
 def load_pattern(pattern, x_offset=0, y_offset=0):
-    global  grid_model
+    global grid_model
 
     clear()
 
@@ -60,15 +62,22 @@ def load_pattern(pattern, x_offset=0, y_offset=0):
 
 
 def print_model(model):
-    for i in model:
-        print(i)
+    for _i in model:
+        print(_i)
+
 
 def gen_index(i, j, max_i, max_j):
     combo = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
     for n, m in combo:
-        if (0 <= i + n  < max_i and
-            0 <= j + m  < max_j):
-            yield (n + i, m + j)
+        if i + n < max_i:
+            row = i + n
+        else:
+            row = i + n - max_i
+        if j + m < max_j:
+            col = j + m
+        else:
+            col = j + m - max_j
+        yield row, col
 
 
 # print(new_model)
@@ -92,9 +101,9 @@ def next_gen():
 
     grid_model = updated_model
 
+
 def clear():
     global grid_model, height, width
-
 
     grid_model = [[0 for j in range(width)] for i in range(height)]
 

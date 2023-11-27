@@ -3,29 +3,30 @@ import model
 
 cell_size = 5
 is_running = False
+root = Tk()
+choice = StringVar(root)
+grid_view = Canvas(root,
+                   width=model.width*cell_size,
+                   height=model.height*cell_size,
+                   borderwidth=0,
+                   highlightthickness=0,
+                   bg='white')
+start_button = Button(root, text='Start', width=12)
+clear_button = Button(root, text='Clear', width=12)
+
 
 def setup():
-    global  root, grid_view, cell_size, start_button, clear_button, choice
+    global root, grid_view, cell_size, start_button, clear_button, choice
 
-    root = Tk()
     root.title('The Game of Life')
 
-    grid_view = Canvas(root,
-                       width=model.width*cell_size,
-                       height=model.height*cell_size,
-                       borderwidth=0,
-                       highlightthickness=0,
-                       bg='white')
-    start_button = Button(root, text='Start', width=12)
     start_button.bind('<Button-1>', start_handler)
 
-    clear_button = Button(root, text='Clear', width=12)
     clear_button.bind('<Button-1>', clear_handler)
 
     grid_view.grid(row=0, columnspan=3, padx=20, pady=20)
     grid_view.bind('<Button-1>', grid_handler)
 
-    choice = StringVar(root)
     choice.set('Choose a Pattern')
     option = OptionMenu(root, choice,
                         'Choose a Pattern',
@@ -39,6 +40,7 @@ def setup():
     start_button.grid(row=1, column=0, sticky=W, padx=20, pady=20)
     option.grid(row=1, column=1, padx=20, pady=20)
     clear_button.grid(row=1, column=2, sticky=E, padx=20, pady=20)
+
 
 def option_handler(event):
     global is_running, start_button, choice
@@ -64,15 +66,16 @@ def grid_handler(event):
     x = int(event.x / cell_size)
     y = int(event.y / cell_size)
 
-    if (model.grid_model[x][y] == 1):
+    if model.grid_model[x][y] == 1:
         model.grid_model[x][y] = 0
         draw_cell(x, y, 'white')
     else:
         model.grid_model[x][y] = 1
         draw_cell(x, y, 'black')
 
+
 def start_handler(event):
-    global  is_running, start_button
+    global is_running, start_button
 
     if is_running:
         is_running = False
@@ -82,13 +85,15 @@ def start_handler(event):
         start_button.configure(text='Pause')
         update()
 
+
 def clear_handler(event):
-    global  is_running, start_button
+    global is_running, start_button
 
     is_running = False
     start_button.configure(text='Start')
     model.clear()
     update()
+
 
 def update():
     global grid_view, root, is_running
@@ -100,11 +105,12 @@ def update():
         for j in range(model.width):
             if model.grid_model[i][j] == 1:
                 draw_cell(i, j, 'black')
-    if(is_running):
+    if is_running:
         root.after(100, update)
 
+
 def draw_cell(row, col, color):
-    global grid_wiev, cell_size
+    global grid_view, cell_size
 
     if color == 'black':
         outline = 'grey'
@@ -116,6 +122,7 @@ def draw_cell(row, col, color):
                                row*cell_size+cell_size,
                                col*cell_size+cell_size,
                                fill=color, outline=outline)
+
 
 if __name__ == '__main__':
     setup()
